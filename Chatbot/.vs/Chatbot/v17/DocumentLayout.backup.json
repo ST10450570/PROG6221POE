@@ -1,0 +1,155 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\lab_services_student\\Desktop\\PROGP3\\Chatbot\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|C:\\Users\\lab_services_student\\Desktop\\PROGP3\\Chatbot\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|C:\\Users\\lab_services_student\\Desktop\\PROGP3\\Chatbot\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|C:\\Users\\lab_services_student\\Desktop\\PROGP3\\Chatbot\\iresponder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|solutionrelative:iresponder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|C:\\Users\\lab_services_student\\Desktop\\PROGP3\\Chatbot\\quiz.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|solutionrelative:quiz.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|C:\\Users\\lab_services_student\\Desktop\\PROGP3\\Chatbot\\securitychatbot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|solutionrelative:securitychatbot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|C:\\Users\\lab_services_student\\Desktop\\PROGP3\\Chatbot\\artdisplay.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|solutionrelative:artdisplay.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|C:\\Users\\lab_services_student\\Desktop\\PROGP3\\Chatbot\\inputvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|solutionrelative:inputvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|c:\\users\\lab_services_student\\desktop\\progp3\\chatbot\\chatbotbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|solutionrelative:chatbotbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ChatbotBase.cs",
+              "DocumentMoniker": "C:\\Users\\lab_services_student\\Desktop\\PROGP3\\Chatbot\\ChatbotBase.cs",
+              "RelativeDocumentMoniker": "ChatbotBase.cs",
+              "ToolTip": "C:\\Users\\lab_services_student\\Desktop\\PROGP3\\Chatbot\\ChatbotBase.cs",
+              "RelativeToolTip": "ChatbotBase.cs",
+              "ViewState": "AgIAAN0AAAAAAAAAAAAuwPsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-23T14:55:54.163Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "InputValidator.cs",
+              "DocumentMoniker": "C:\\Users\\lab_services_student\\Desktop\\PROGP3\\Chatbot\\InputValidator.cs",
+              "RelativeDocumentMoniker": "InputValidator.cs",
+              "ToolTip": "C:\\Users\\lab_services_student\\Desktop\\PROGP3\\Chatbot\\InputValidator.cs",
+              "RelativeToolTip": "InputValidator.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAmwB0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-23T14:57:13.04Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ArtDisplay.cs",
+              "DocumentMoniker": "C:\\Users\\lab_services_student\\Desktop\\PROGP3\\Chatbot\\ArtDisplay.cs",
+              "RelativeDocumentMoniker": "ArtDisplay.cs",
+              "ToolTip": "C:\\Users\\lab_services_student\\Desktop\\PROGP3\\Chatbot\\ArtDisplay.cs",
+              "RelativeToolTip": "ArtDisplay.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAAAwDUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-23T14:54:41.315Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "SecurityChatbot.cs",
+              "DocumentMoniker": "C:\\Users\\lab_services_student\\Desktop\\PROGP3\\Chatbot\\SecurityChatbot.cs",
+              "RelativeDocumentMoniker": "SecurityChatbot.cs",
+              "ToolTip": "C:\\Users\\lab_services_student\\Desktop\\PROGP3\\Chatbot\\SecurityChatbot.cs",
+              "RelativeToolTip": "SecurityChatbot.cs",
+              "ViewState": "AgIAAJsCAAAAAAAAAAAuwLkCAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-23T14:41:51.877Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\lab_services_student\\Desktop\\PROGP3\\Chatbot\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "MainWindow.xaml",
+              "ToolTip": "C:\\Users\\lab_services_student\\Desktop\\PROGP3\\Chatbot\\MainWindow.xaml",
+              "RelativeToolTip": "MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-06-22T18:08:00.125Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\lab_services_student\\Desktop\\PROGP3\\Chatbot\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\lab_services_student\\Desktop\\PROGP3\\Chatbot\\MainWindow.xaml.cs",
+              "RelativeToolTip": "MainWindow.xaml.cs",
+              "ViewState": "AgIAANoBAAAAAAAAAAA6wPEBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-22T18:07:58.664Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Quiz.cs",
+              "DocumentMoniker": "C:\\Users\\lab_services_student\\Desktop\\PROGP3\\Chatbot\\Quiz.cs",
+              "RelativeDocumentMoniker": "Quiz.cs",
+              "ToolTip": "C:\\Users\\lab_services_student\\Desktop\\PROGP3\\Chatbot\\Quiz.cs",
+              "RelativeToolTip": "Quiz.cs",
+              "ViewState": "AgIAAJEAAAAAAAAAAAAgwKoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-23T15:50:11.808Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "IResponder.cs",
+              "DocumentMoniker": "C:\\Users\\lab_services_student\\Desktop\\PROGP3\\Chatbot\\IResponder.cs",
+              "RelativeDocumentMoniker": "IResponder.cs",
+              "ToolTip": "C:\\Users\\lab_services_student\\Desktop\\PROGP3\\Chatbot\\IResponder.cs",
+              "RelativeToolTip": "IResponder.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-23T14:58:13.748Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

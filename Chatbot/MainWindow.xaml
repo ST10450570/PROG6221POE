@@ -1,0 +1,273 @@
+﻿<Window x:Class="Chatbot.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Chatbot"
+        mc:Ignorable="d"
+        Title="Cybersecurity Awareness Chatbot" Height="700" Width="1000"
+        WindowStartupLocation="CenterScreen"
+        Background="#FF1A1A1A">
+
+    <Window.Resources>
+        <!-- Drop shadow effect -->
+        <DropShadowEffect x:Key="PanelShadow" ShadowDepth="0" BlurRadius="8" Color="#66000000"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+
+
+        <!-- Modern Dark Button Style -->
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Background" Value="#FF2E2E2E"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderBrush" Value="#FF007ACC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Modern TextBox Style -->
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="6"/>
+            <Setter Property="Background" Value="#FF2D2D30"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#FF007ACC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Modern ListBox Style -->
+        <Style TargetType="ListBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Background" Value="#FF1A1A1A"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#FF007ACC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Main Chat Panel -->
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Border Grid.Row="0" Background="#FF1E1E1E" Padding="15" CornerRadius="8" Effect="{StaticResource PanelShadow}">
+                <TextBlock Text="🛡 Cybersecurity Awareness Chatbot" Foreground="White"
+                           FontSize="20" FontWeight="Bold" HorizontalAlignment="Center"/>
+            </Border>
+
+            <!-- Chat Display -->
+            <RichTextBox x:Name="ChatDisplay" Grid.Row="1" IsReadOnly="True"
+                         Background="#FF1A1A1A" Foreground="White" BorderThickness="0"
+                         Padding="10" FontSize="14" FontFamily="Segoe UI">
+                <RichTextBox.Resources>
+                    <Style TargetType="Paragraph">
+                        <Setter Property="Margin" Value="0,6,0,6"/>
+                    </Style>
+                </RichTextBox.Resources>
+            </RichTextBox>
+
+            <!-- Chat Input Area -->
+            <Grid Grid.Row="2" Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="UserInput" Grid.Column="0" Height="35" KeyDown="UserInput_KeyDown"/>
+                <Button x:Name="SendButton" Grid.Column="1" Content="📨 Send" Width="100" Height="35" Click="SendButton_Click"/>
+            </Grid>
+
+            <!-- Status Bar -->
+            <StatusBar Grid.Row="3" Background="#FF1E1E1E" Foreground="White" Padding="5">
+                <StatusBarItem>
+                    <TextBlock x:Name="StatusText" Text="Ready" FontStyle="Italic"/>
+                </StatusBarItem>
+            </StatusBar>
+        </Grid>
+
+        <!-- Side Panel -->
+        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+        <Grid Grid.Column="1" Width="300" Background="#FF252526">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Side Header -->
+            <Border Grid.Row="0" Background="#FF1E1E1E" Padding="10">
+                <TextBlock Text="⚙ Tools" Foreground="White" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center"/>
+            </Border>
+
+            <!-- Tabs -->
+            <TabControl Grid.Row="1" Background="Transparent" BorderThickness="0">
+                <!-- Tasks Tab -->
+                <TabItem Header="📝 Tasks">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Task Input -->
+                        <StackPanel Grid.Row="0" Margin="5">
+                            <TextBlock Text="New Task" Foreground="White" Margin="0,0,0,5"/>
+                            <!-- Task Title Input with Placeholder -->
+                            <Grid>
+                                <TextBox x:Name="TaskTitleInput" TextChanged="Input_TextChanged"/>
+                                    <TextBlock Text="Title"
+                                        Foreground="Gray"
+                                        Margin="10,0,0,0"
+                                        VerticalAlignment="Center"
+                                        IsHitTestVisible="False"
+                                        Visibility="{Binding ElementName=TaskTitleInput, Path=Text.Length, Converter={StaticResource BoolToVis}, ConverterParameter=0}"/>
+                            </Grid>
+
+
+                            <!-- Task Description Input with Placeholder -->
+                            <Grid Margin="0,5,0,0">
+                                <TextBox x:Name="TaskDescriptionInput" TextChanged="Input_TextChanged"/>
+                                <TextBlock Text="Description"
+                                    Foreground="Gray"
+                                    Margin="10,0,0,0"
+                                    VerticalAlignment="Center"
+                                    IsHitTestVisible="False"
+                                    Visibility="{Binding ElementName=TaskDescriptionInput, Path=Text.Length, Converter={StaticResource BoolToVis}, ConverterParameter=0}"/>
+                            </Grid>
+
+
+                            <DatePicker x:Name="TaskReminderDate" Margin="0,5,0,0" IsEnabled="False"/>
+                            <CheckBox x:Name="SetReminderCheck" Content="Set Reminder" Foreground="White"
+                                      Margin="0,5,0,0"
+                                      Checked="SetReminderCheck_Checked" Unchecked="SetReminderCheck_Unchecked"/>
+                            <Button x:Name="AddTaskButton" Content="Add Task" Margin="0,5,0,0" Click="AddTaskButton_Click"/>
+                        </StackPanel>
+
+                        <!-- Task List -->
+                        <ListBox x:Name="TasksList" Grid.Row="1" Margin="5">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="5">
+                                        <TextBlock Text="{Binding Title}" FontWeight="Bold" Foreground="White"/>
+                                        <TextBlock Text="{Binding Description}" Foreground="#FFBBBBBB" TextWrapping="Wrap"/>
+                                        <TextBlock Text="{Binding ReminderText}" Foreground="#FF88AAFF" FontStyle="Italic"/>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0">
+                                            <Button Content="✓" Width="30" Tag="{Binding}" Click="CompleteTaskButton_Click"/>
+                                            <Button Content="✕" Width="30" Tag="{Binding}" Click="DeleteTaskButton_Click" Margin="5,0,0,0"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                        <!-- Task Actions -->
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                            <Button x:Name="ShowCompletedTasks" Content="Show Completed" Click="ShowCompletedTasks_Click"/>
+                            <Button x:Name="HideCompletedTasks" Content="Hide Completed" Click="HideCompletedTasks_Click" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+
+                <!-- Quiz Tab -->
+                <TabItem Header="🧠 Quiz">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0" Margin="5">
+                            <TextBlock x:Name="QuizQuestionText" TextWrapping="Wrap" Foreground="White" Margin="0,0,0,10"/>
+                            <RadioButton x:Name="QuizOption1" GroupName="QuizOptions" Foreground="White" Margin="0,0,0,5"/>
+                            <RadioButton x:Name="QuizOption2" GroupName="QuizOptions" Foreground="White" Margin="0,0,0,5"/>
+                            <RadioButton x:Name="QuizOption3" GroupName="QuizOptions" Foreground="White" Margin="0,0,0,5"/>
+                            <RadioButton x:Name="QuizOption4" GroupName="QuizOptions" Foreground="White" Margin="0,0,0,10"/>
+                            <TextBlock x:Name="QuizFeedbackText" TextWrapping="Wrap" Foreground="#FF88FF88" Margin="0,0,0,10"/>
+                            <TextBlock x:Name="QuizScoreText" TextWrapping="Wrap" Foreground="White" Margin="0,0,0,10"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                            <Button x:Name="StartQuizButton" Content="Start Quiz" Click="StartQuizButton_Click"/>
+                            <Button x:Name="SubmitQuizButton" Content="Submit Answer" Click="SubmitQuizButton_Click" Margin="5,0,0,0" IsEnabled="False"/>
+                            <Button x:Name="NextQuizButton" Content="Next Question" Click="NextQuizButton_Click" Margin="5,0,0,0" IsEnabled="False"/>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+
+                <!-- Activity Log Tab -->
+                <TabItem Header="📜 Activity Log">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <ListBox x:Name="ActivityLogList" Margin="5">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="5">
+                                        <TextBlock Text="{Binding Timestamp}" Foreground="#FFAAAAAA" FontSize="10"/>
+                                        <TextBlock Text="{Binding Action}" Foreground="White" TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                            <Button x:Name="RefreshLogButton" Content="Refresh Log" Click="RefreshLogButton_Click"/>
+                            <Button x:Name="ClearLogButton" Content="Clear Log" Click="ClearLogButton_Click" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+
+            <!-- Footer -->
+            <Border Grid.Row="2" Background="#FF1E1E1E" Padding="10">
+                <StackPanel Orientation="Horizontal">
+                    <Ellipse Width="40" Height="40" Fill="#FF007ACC" Margin="0,0,10,0"/>
+                    <TextBlock x:Name="UserInfoText" Text="Guest" VerticalAlignment="Center" Foreground="White"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>
