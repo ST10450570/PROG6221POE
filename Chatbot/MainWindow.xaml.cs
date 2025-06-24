@@ -20,6 +20,16 @@ namespace Chatbot
         private List<ActivityLogEntry> _activityLog = new List<ActivityLogEntry>();
         private Quiz _quizGame;
         private bool _showingCompletedTasks = false;
+        private bool _awaitingTaskTitle = false;
+        private bool _awaitingName = false;
+        private bool _awaitingTaskDescription = false;
+        private bool _awaitingTaskReminder = false;
+        private string _currentTaskTitle = "";
+        private string _currentTaskDescription = "";
+
+
+
+
 
         public MainWindow()
         {
@@ -29,7 +39,9 @@ namespace Chatbot
             SetupReminderTimer();
             UpdateTaskListDisplay();
             UpdateActivityLog();
-            UserInfoText.Text = "Guest";
+            UserInfoText.Text = "User";
+            _awaitingName = true;
+            AppendToChat("🤖 Welcome to the Cybersecurity Awareness Chatbot! What's your name?", Brushes.Magenta);
         }
 
         private void InitializeChatbot()
@@ -38,7 +50,7 @@ namespace Chatbot
             {
                 string audioPath = @"C:\Users\lab_services_student\Desktop\PROGP3\Chatbot\greeting.wav";
                 _chatbot = new SecurityChatbot(audioPath);
-                _chatbot.Greet(this);
+                //_chatbot.Greet(this);
                 AddToActivityLog("Application started", "System");
             }
             catch (Exception ex)
@@ -97,6 +109,30 @@ namespace Chatbot
 
             try
             {
+                if (_awaitingName)
+                {
+                    HandleNameInput(input);
+                    return;
+                }
+
+                if (_awaitingTaskTitle)
+                {
+                    HandleTaskTitleInput(input);
+                    return;
+                }
+
+                if (_awaitingTaskDescription)
+                {
+                    HandleTaskDescriptionInput(input);
+                    return;
+                }
+
+                if (_awaitingTaskReminder)
+                {
+                    HandleTaskReminderInput(input);
+                    return;
+                }
+
                 if (HandleSpecialCommands(input))
                 {
                     return;
@@ -110,6 +146,78 @@ namespace Chatbot
             }
         }
 
+        private void HandleNameInput(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                AppendToChat("🤖 Please enter a valid name.", Brushes.Magenta);
+                return;
+            }
+
+            _chatbot.Username = name;
+            UserInfoText.Text = name;
+            _awaitingName = false;
+            AppendToChat($"🤖 Nice to meet you, {name}! How can I help you with cybersecurity today?", Brushes.Magenta);
+            AddToActivityLog($"User set name to: {name}", "User");
+        }
+
+        private void HandleTaskTitleInput(string title)
+        {
+            _currentTaskTitle = title;
+            _awaitingTaskTitle = false;
+            _awaitingTaskDescription = true;
+            AppendToChat("🤖 Please enter the task description:", Brushes.Magenta);
+        }
+
+        private void HandleTaskDescriptionInput(string description)
+        {
+            _currentTaskDescription = description;
+            _awaitingTaskDescription = false;
+            _awaitingTaskReminder = true;
+            AppendToChat("🤖 Would you like to set a reminder? (yes/no or specify days, e.g. '3 days')", Brushes.Magenta);
+        }
+
+        private void HandleTaskReminderInput(string input)
+        {
+            DateTime? reminderDate = null;
+            input = input.ToLower();
+
+            if (input == "yes" || input == "y")
+            {
+                reminderDate = DateTime.Now.AddDays(1); // Default to 1 day if just "yes"
+            }
+            else if (input.StartsWith("in "))
+            {
+                if (int.TryParse(input.Substring(3).Split(' ')[0], out int days))
+                {
+                    reminderDate = DateTime.Now.AddDays(days);
+                }
+            }
+
+            // Create the task
+            var task = new TaskItem
+            {
+                Title = _currentTaskTitle,
+                Description = _currentTaskDescription,
+                ReminderDate = reminderDate,
+                CreatedDate = DateTime.Now,
+                IsCompleted = false
+            };
+
+            _tasks.Add(task);
+
+            AppendToChat($"🤖 Task added: {task.Title}" +
+                (task.ReminderDate.HasValue ? $" (Reminder set for {task.ReminderDate.Value.ToShortDateString()})" : ""),
+                Brushes.LightGreen);
+
+            AddToActivityLog($"Task added via chat: {task.Title}", "User");
+            UpdateTaskListDisplay();
+
+            // Reset task state
+            _awaitingTaskReminder = false;
+            _currentTaskTitle = "";
+            _currentTaskDescription = "";
+        }
         private bool HandleSpecialCommands(string input)
         {
             if (input.Equals("topics", StringComparison.OrdinalIgnoreCase) ||
@@ -156,6 +264,27 @@ namespace Chatbot
             return false;
         }
 
+        private void StartTaskCreation()
+        {
+            _awaitingTaskTitle = true;
+            AppendToChat("🤖 Please enter the task title:", Brushes.Magenta);
+        }
+
+        private void DisplayRecentActivity()
+        {
+            var recentLogs = _activityLog
+                .OrderByDescending(x => x.Timestamp)
+                .Take(5)
+                .ToList();
+
+            AppendToChat("📜 Recent Activity Log:", Brushes.White);
+            foreach (var log in recentLogs)
+            {
+                AppendToChat($"• {log.Timestamp.ToShortTimeString()}: {log.Action}", Brushes.LightGray);
+            }
+
+            UpdateActivityLog(); 
+        }
         private void HandleAddTaskCommand(string input)
         {
             string taskDetails = input.Substring(input.IndexOf("task", StringComparison.OrdinalIgnoreCase) + 4);
@@ -470,6 +599,40 @@ namespace Chatbot
 
         private void Input_TextChanged(object sender, TextChangedEventArgs e)
         {
+        }
+
+        private void RemovePlaceholderText(object sender, RoutedEventArgs e)
+        {
+            if (sender is TextBox textBox)
+            {
+                if (textBox.Name == "TaskTitleInput" && textBox.Text == "Task title...")
+                {
+                    textBox.Text = "";
+                    textBox.Foreground = Brushes.White;
+                }
+                else if (textBox.Name == "TaskDescriptionInput" && textBox.Text == "Description...")
+                {
+                    textBox.Text = "";
+                    textBox.Foreground = Brushes.White;
+                }
+            }
+        }
+
+        private void AddPlaceholderText(object sender, RoutedEventArgs e)
+        {
+            if (sender is TextBox textBox)
+            {
+                if (textBox.Name == "TaskTitleInput" && string.IsNullOrWhiteSpace(textBox.Text))
+                {
+                    textBox.Text = "Task title...";
+                    textBox.Foreground = Brushes.Gray;
+                }
+                else if (textBox.Name == "TaskDescriptionInput" && string.IsNullOrWhiteSpace(textBox.Text))
+                {
+                    textBox.Text = "Description...";
+                    textBox.Foreground = Brushes.Gray;
+                }
+            }
         }
     }
 

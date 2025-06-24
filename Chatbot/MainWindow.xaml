@@ -268,7 +268,7 @@
             <Border Grid.Row="2" Background="#FF1E1E1E" Padding="10">
                 <StackPanel Orientation="Horizontal">
                     <Ellipse Width="40" Height="40" Fill="#FF007ACC" Margin="0,0,10,0"/>
-                    <TextBlock x:Name="UserInfoText" Text="Guest" VerticalAlignment="Center" Foreground="White"/>
+                    <TextBlock x:Name="UserInfoText" Text="User" VerticalAlignment="Center" Foreground="White"/>
                 </StackPanel>
             </Border>
         </Grid>
