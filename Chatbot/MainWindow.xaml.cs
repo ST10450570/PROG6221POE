@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Media;
-using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -44,14 +43,13 @@ namespace Chatbot
             }
             catch (Exception ex)
             {
-                AppendToChat("⚠️ Error initializing chatbot: " + ex.Message, Brushes.Red);
+                AppendToChat("▲ Error initializing chatbot: " + ex.Message, Brushes.Red);
             }
         }
 
         private void InitializeQuiz()
         {
             _quizGame = new Quiz();
-           
         }
 
         private void SetupReminderTimer()
@@ -68,7 +66,7 @@ namespace Chatbot
             foreach (var task in _tasks.Where(t => t.ReminderDate.HasValue && t.ReminderDate <= now && !t.ReminderTriggered))
             {
                 task.ReminderTriggered = true;
-                AppendToChat($"🔔 Reminder: {task.Title} - {task.Description}", Brushes.Orange);
+                AppendToChat($"▲ Reminder: {task.Title} - {task.Description}", Brushes.Orange);
                 AddToActivityLog($"Reminder triggered for task: {task.Title}", "System");
             }
         }
@@ -108,7 +106,7 @@ namespace Chatbot
             }
             catch (Exception ex)
             {
-                AppendToChat($"⚠️ Error: {ex.Message}", Brushes.Red);
+                AppendToChat($"▲ Error: {ex.Message}", Brushes.Red);
             }
         }
 
@@ -147,6 +145,14 @@ namespace Chatbot
                 return true;
             }
 
+            if (input.StartsWith("set reminder for 3 days", StringComparison.OrdinalIgnoreCase))
+            {
+                TaskReminderDate.SelectedDate = DateTime.Now.AddDays(3);
+                SetReminderCheck.IsChecked = true;
+                AppendToChat("Reminder set for 3 days from now", Brushes.LightGreen);
+                return true;
+            }
+
             return false;
         }
 
@@ -173,11 +179,22 @@ namespace Chatbot
         private void ShowAvailableTopics()
         {
             var topics = _chatbot.GetAvailableTopics();
-            AppendToChat("Available topics:\n" + string.Join(", ", topics), Brushes.LightGreen);
+            AppendToChat("Available topics:\n" + string.Join(". ", topics), Brushes.LightGreen);
         }
 
         private void ShowActivityLog()
         {
+            var recentLogs = _activityLog
+                .OrderByDescending(x => x.Timestamp)
+                .Take(5)
+                .ToList();
+
+            AppendToChat("Recent Activity Log:", Brushes.White);
+            foreach (var log in recentLogs)
+            {
+                AppendToChat($"• {log.Timestamp.ToShortTimeString()}: {log.Action}", Brushes.White);
+            }
+
             UpdateActivityLog();
             AppendToChat("Activity log displayed in side panel", Brushes.LightGreen);
         }
@@ -257,9 +274,8 @@ namespace Chatbot
             SetReminderCheck.IsChecked = false;
 
             AppendToChat($"Task added: {task.Title}" +
-                (task.ReminderDate.HasValue ? $" (Reminder set for {task.ReminderDate.Value.ToShortDateString()})" : ""),
+                (task.ReminderDate.HasValue ? $" (Reminder set for {task.ReminderDate.Value.ToString()})" : ""),
                 Brushes.LightGreen);
-
             AddToActivityLog($"Task added: {task.Title}", "User");
             UpdateTaskListDisplay();
         }
@@ -331,7 +347,6 @@ namespace Chatbot
             NextQuizButton.IsEnabled = false;
             QuizFeedbackText.Text = "";
             QuizScoreText.Text = "";
-
             AppendToChat("Quiz started! Answer the questions in the side panel.", Brushes.LightGreen);
             AddToActivityLog("Quiz started", "User");
         }
@@ -348,18 +363,14 @@ namespace Chatbot
 
             bool isCorrect = _quizGame.CheckAnswer(selectedOption);
             string feedback = _quizGame.GetCurrentQuestion().Feedback;
-
             QuizFeedbackText.Text = isCorrect ?
                 $"Correct! {feedback}" :
                 $"Incorrect. {feedback}";
             QuizFeedbackText.Foreground = isCorrect ? Brushes.LightGreen : Brushes.Orange;
-
             QuizScoreText.Text = $"Score: {_quizGame.Score}/{_quizGame.CurrentQuestionIndex + 1}";
             QuizScoreText.Foreground = Brushes.White;
-
             SubmitQuizButton.IsEnabled = false;
             NextQuizButton.IsEnabled = true;
-
             AddToActivityLog($"Answered quiz question: {_quizGame.GetCurrentQuestion().QuestionText}", "User");
         }
 
@@ -388,30 +399,26 @@ namespace Chatbot
 
             if (_quizGame.CurrentQuestionIndex >= _quizGame.Questions.Count)
             {
-                QuizCompleted(); // Prevents crashing and handles completion gracefully
+                QuizCompleted();
                 return;
             }
 
             var question = _quizGame.GetCurrentQuestion();
             QuizQuestionText.Text = question.QuestionText;
 
-            // Reset options
             QuizOption1.IsChecked = false;
             QuizOption2.IsChecked = false;
             QuizOption3.IsChecked = false;
             QuizOption4.IsChecked = false;
 
-            // Hide unused options for True/False
             QuizOption3.Visibility = question.Options.Count > 2 ? Visibility.Visible : Visibility.Collapsed;
             QuizOption4.Visibility = question.Options.Count > 3 ? Visibility.Visible : Visibility.Collapsed;
 
-            // Dynamically populate available options
             QuizOption1.Content = question.Options.ElementAtOrDefault(0) ?? "";
             QuizOption2.Content = question.Options.ElementAtOrDefault(1) ?? "";
             QuizOption3.Content = question.Options.ElementAtOrDefault(2) ?? "";
             QuizOption4.Content = question.Options.ElementAtOrDefault(3) ?? "";
         }
-
 
         private string GetSelectedOption()
         {
@@ -426,7 +433,6 @@ namespace Chatbot
         {
             double percentage = (double)_quizGame.Score / _quizGame.Questions.Count * 100;
             string message;
-
             if (percentage >= 80) message = "Excellent! You're a cybersecurity expert!";
             else if (percentage >= 60) message = "Good job! You know quite a bit about cybersecurity.";
             else if (percentage >= 40) message = "Not bad! Keep learning to improve your score.";
@@ -440,7 +446,6 @@ namespace Chatbot
             QuizFeedbackText.Text = message;
             QuizScoreText.Text = $"Final score: {_quizGame.Score}/{_quizGame.Questions.Count}";
             QuizScoreText.Foreground = Brushes.Yellow;
-
             StartQuizButton.IsEnabled = true;
             SubmitQuizButton.IsEnabled = false;
             NextQuizButton.IsEnabled = false;
@@ -465,7 +470,6 @@ namespace Chatbot
 
         private void Input_TextChanged(object sender, TextChangedEventArgs e)
         {
-            // This method can be used for input validation if needed
         }
     }
 
@@ -478,9 +482,8 @@ namespace Chatbot
         public DateTime? CompletedDate { get; set; }
         public bool IsCompleted { get; set; }
         public bool ReminderTriggered { get; set; }
-
         public string ReminderText => ReminderDate.HasValue ?
-            $"⏰ Reminder: {ReminderDate.Value.ToShortDateString()}" :
+            $"  Remember: {ReminderDate.Value.ToString()}" :
             "No reminder set";
     }
 
