@@ -93,6 +93,7 @@ namespace Chatbot
                         { "phishing", "I understand phishing can be really scary with all those sophisticated fake emails going around. The good news is you're taking the first step by learning how to spot them! Would you like me to walk you through some recent phishing examples so you can feel more prepared?" },
                         { "malware", "Malware does sound frightening, especially with how sneaky some variants can be. But here's something reassuring - with proper precautions, you can keep your devices about 99% safer. Would you like to know the most effective protections against malware?" },
                         { "hacking", "The idea of being hacked is definitely anxiety-inducing. I want you to know that while threats exist, there are many powerful ways to protect yourself. What specifically about hacking worries you the most?" },
+                        
                         { "default", "I can hear the concern in your words. Cybersecurity issues can feel overwhelming, but you're not alone in this. Would it help if we talk through what's worrying you? I'm here to help you feel more secure." }
                     }
                 },

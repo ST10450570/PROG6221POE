@@ -117,7 +117,9 @@ namespace Chatbot
                 }},
                 { "hackers", new[] {
                     "👨‍💻 Hackers range from ethical 'white hats' to criminal 'black hats' and activist 'hacktivists' with different motives.",
-                    "🕵️‍♂️ Advanced Persistent Threats (APTs) are sophisticated hackers often backed by nation-states for espionage."
+                    "🕵️‍♂️ Advanced Persistent Threats (APTs) are sophisticated hackers often backed by nation-states for espionage.",
+                    "🛠️ Gray hats operate in a legal gray area, sometimes breaking laws to expose vulnerabilities without malicious intent.",
+                    "Knowledgeable hackers can be allies in improving security, but malicious actors pose significant risks."
                 }},
                 { "script kiddies", new[] {
                     "👶 Script kiddies use pre-made tools without technical knowledge - often causing damage through inexperience.",
@@ -125,11 +127,14 @@ namespace Chatbot
                 }},
                 { "phishing", new[] {
                     "🎣 Phishing uses fake communications to steal data. Variants include spear phishing (targeted) and whaling (executive targets).",
-                    "📧 Smishing (SMS) and vishing (voice) are phone-based phishing methods becoming more common."
+                    "📧 Smishing (SMS) and vishing (voice) are phone-based phishing methods becoming more common.",
+                    "🔗 Angler phishing targets social media users by impersonating support accounts to steal credentials.",
                 }},
                 { "malware", new[] {
                     "🦠 Malware includes viruses, worms, trojans, spyware - each with different infection methods and payloads.",
-                    "💣 Logic bombs are malware that activates when specific conditions are met, often by disgruntled insiders."
+                    "💣 Logic bombs are malware that activates when specific conditions are met, often by disgruntled insiders.",
+                    "🕵️‍♂️ Fileless malware resides in memory rather than files, making it harder to detect with traditional antivirus.",
+                    "🔄 Polymorphic malware changes its code to evade detection, making it a persistent threat."
                 }},
                 { "trojan", new[] {
                     "🐴 Trojans disguise themselves as legitimate software while creating backdoors for attackers.",
@@ -161,11 +166,13 @@ namespace Chatbot
                 }},
                 { "antivirus", new[] {
                     "🛡️ Modern EDR (Endpoint Detection & Response) solutions go beyond signature detection to behavioral analysis.",
-                    "🔍 Sandboxing isolates suspicious files in virtual environments to analyze behavior safely."
+                    "🔍 Sandboxing isolates suspicious files in virtual environments to analyze behavior safely.",
+                    "🧠 Heuristic analysis detects new malware by analyzing behavior patterns rather than relying solely on known signatures."
                 }},
                 { "vpn", new[] {
                     "🔒 Zero Trust VPNs verify each request as if originating from an open network, reducing trust assumptions.",
-                    "🌍 VPN protocols like WireGuard offer faster speeds while maintaining strong encryption."
+                    "🌍 VPN protocols like WireGuard offer faster speeds while maintaining strong encryption.",
+                    "📱 Mobile VPNs protect data on public WiFi, but can leak DNS requests if not configured properly."
                 }},
                 { "zero trust", new[] {
                     "❌ Zero Trust architecture assumes breach and verifies each request - 'never trust, always verify'.",
@@ -181,7 +188,8 @@ namespace Chatbot
                 }},
                 { "privacy", new[] {
                     "👁️ Privacy focuses on controlling personal data collection and usage, distinct from security.",
-                    "🌐 GDPR, CCPA and other regulations enforce privacy rights with strict compliance requirements."
+                    "🌐 GDPR, CCPA and other regulations enforce privacy rights with strict compliance requirements.",
+                    "🔍 Data minimization reduces risk by collecting only necessary information."
                 }},
                 { "encryption", new[] {
                     "🔐 End-to-end encryption ensures only communicating users can read messages - not even service providers.",
@@ -189,11 +197,15 @@ namespace Chatbot
                 }},
                 { "password", new[] {
                     "🔑 NIST now recommends longer passphrases over complex short passwords changed frequently.",
-                    "🧠 Password managers generate/store strong credentials and only require remembering one master password."
+                    "🧠 Password managers generate/store strong credentials and only require remembering one master password.",
+                    "🔄 Regularly updating passwords helps mitigate risks from data breaches and credential stuffing attacks.",
+                    "Password is a secret sequence of characters used to authenticate a user. Strong passwords are essential for protecting accounts and sensitive information."
                 }},
                 { "two factor", new[] {
                     "📲 2FA methods include SMS codes, authenticator apps, hardware tokens, and biometric verification.",
-                    "⚠️ SMS-based 2FA is vulnerable to SIM swapping attacks - use app-based when possible."
+                    "⚠️ SMS-based 2FA is vulnerable to SIM swapping attacks - use app-based when possible.",
+                    "🔑 Multi-factor authentication (MFA) adds layers of security beyond just passwords, significantly reducing account compromise risk."
+
                 }},
                 { "data breach", new[] {
                     "📉 The average cost of a data breach reached $4.45 million in 2023 according to IBM research.",
@@ -205,7 +217,9 @@ namespace Chatbot
                 }},
                 { "scam", new[] {
                     "🕵️ Scams come in many forms - phishing emails, fake tech support calls, romance scams, and more.",
-                    "💡 Always verify requests for money or information through a separate communication channel."
+                    "💡 Always verify requests for money or information through a separate communication channel.",
+                    "🚨 If something seems too good to be true, it probably is. Be skeptical of unsolicited offers."
+
                 }}
             };
         }
@@ -296,7 +310,7 @@ namespace Chatbot
                 { "malware", new List<string> {
                     "viruses", "worms", "trojans", "spyware", "adware", "rootkits",
                     "keyloggers", "botnets", "logic bombs", "fileless malware",
-                    "polymorphic malware", "macro viruses", "crypto malware"
+                    "polymorphic malware", "macro viruses", "crypto malware" ,"virus"
                 }},
                 { "ransomware", new List<string> {
                     "crypto ransomware", "locker ransomware", "doxware", "leakware",

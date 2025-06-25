@@ -48,7 +48,7 @@ namespace Chatbot
         {
             try
             {
-                string audioPath = @"C:\Users\lab_services_student\Desktop\PROGP3\Chatbot\greeting.wav";
+                string audioPath = @"C:\Users\chuma\OneDrive\Desktop\PROG6221POE\Chatbot\greeting.wav";
                 _chatbot = new SecurityChatbot(audioPath);
                 _chatbot.Greet(this);
                 AddToActivityLog("Application started", "System");
