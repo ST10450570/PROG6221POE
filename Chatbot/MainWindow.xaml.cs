@@ -50,7 +50,7 @@ namespace Chatbot
             {
                 string audioPath = @"C:\Users\lab_services_student\Desktop\PROGP3\Chatbot\greeting.wav";
                 _chatbot = new SecurityChatbot(audioPath);
-                //_chatbot.Greet(this);
+                _chatbot.Greet(this);
                 AddToActivityLog("Application started", "System");
             }
             catch (Exception ex)

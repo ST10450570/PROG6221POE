@@ -3,11 +3,11 @@
   "WorkspaceRootPath": "C:\\Users\\lab_services_student\\Desktop\\PROG6221POE\\Chatbot\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|C:\\Users\\lab_services_student\\Desktop\\PROG6221POE\\Chatbot\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|c:\\users\\lab_services_student\\desktop\\prog6221poe\\chatbot\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|c:\\users\\lab_services_student\\desktop\\prog6221poe\\chatbot\\securitychatbot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|C:\\Users\\lab_services_student\\Desktop\\PROG6221POE\\Chatbot\\securitychatbot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|solutionrelative:securitychatbot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -52,7 +52,7 @@
               "RelativeDocumentMoniker": "MainWindow.xaml.cs",
               "ToolTip": "C:\\Users\\lab_services_student\\Desktop\\PROG6221POE\\Chatbot\\MainWindow.xaml.cs",
               "RelativeToolTip": "MainWindow.xaml.cs",
-              "ViewState": "AgIAACAAAAAAAAAAAAAQwDQAAAASAAAAAAAAAA==",
+              "ViewState": "AgIAAAIAAAAAmZmZmZkNwDQAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-22T18:07:58.664Z",
               "EditorCaption": ""
@@ -103,8 +103,7 @@
               "RelativeToolTip": "SecurityChatbot.cs",
               "ViewState": "AgIAAF8BAAAAAAAAAAAewJMBAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-23T14:41:51.877Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-23T14:41:51.877Z"
             },
             {
               "$type": "Document",
@@ -115,8 +114,7 @@
               "ToolTip": "C:\\Users\\lab_services_student\\Desktop\\PROG6221POE\\Chatbot\\MainWindow.xaml",
               "RelativeToolTip": "MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-06-22T18:08:00.125Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-22T18:08:00.125Z"
             },
             {
               "$type": "Document",
