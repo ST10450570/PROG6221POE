@@ -7,16 +7,12 @@
       "RelativeMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|C:\\Users\\chuma\\OneDrive\\Desktop\\PROG6221POE\\Chatbot\\quiz.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|solutionrelative:quiz.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|C:\\Users\\chuma\\OneDrive\\Desktop\\PROG6221POE\\Chatbot\\securitychatbot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|solutionrelative:securitychatbot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|c:\\users\\chuma\\onedrive\\desktop\\prog6221poe\\chatbot\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|C:\\Users\\chuma\\OneDrive\\Desktop\\PROG6221POE\\Chatbot\\securitychatbot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|solutionrelative:securitychatbot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|C:\\Users\\chuma\\OneDrive\\Desktop\\PROG6221POE\\Chatbot\\chatbotbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -25,6 +21,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|C:\\Users\\chuma\\OneDrive\\Desktop\\PROG6221POE\\Chatbot\\iresponder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|solutionrelative:iresponder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|C:\\Users\\chuma\\OneDrive\\Desktop\\PROG6221POE\\Chatbot\\quiz.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|solutionrelative:quiz.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1C169E6D-B62A-43A1-8FEE-15D24A91730A}|Chatbot.csproj|C:\\Users\\chuma\\OneDrive\\Desktop\\PROG6221POE\\Chatbot\\artdisplay.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -52,22 +52,22 @@
               "RelativeDocumentMoniker": "MainWindow.xaml.cs",
               "ToolTip": "C:\\Users\\chuma\\OneDrive\\Desktop\\PROG6221POE\\Chatbot\\MainWindow.xaml.cs",
               "RelativeToolTip": "MainWindow.xaml.cs",
-              "ViewState": "AgIAACkBAAAAAAAAAAAYwK4BAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAACsAAAAAAAAAAAAQwDYAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-22T18:07:58.664Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "SecurityChatbot.cs",
-              "DocumentMoniker": "C:\\Users\\chuma\\OneDrive\\Desktop\\PROG6221POE\\Chatbot\\SecurityChatbot.cs",
-              "RelativeDocumentMoniker": "SecurityChatbot.cs",
-              "ToolTip": "C:\\Users\\chuma\\OneDrive\\Desktop\\PROG6221POE\\Chatbot\\SecurityChatbot.cs",
-              "RelativeToolTip": "SecurityChatbot.cs",
-              "ViewState": "AgIAANcCAAAAAAAAAAAuwOMCAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-23T14:41:51.877Z"
+              "DocumentIndex": 2,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\chuma\\OneDrive\\Desktop\\PROG6221POE\\Chatbot\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "MainWindow.xaml",
+              "ToolTip": "C:\\Users\\chuma\\OneDrive\\Desktop\\PROG6221POE\\Chatbot\\MainWindow.xaml",
+              "RelativeToolTip": "MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-06-22T18:08:00.125Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -83,7 +83,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
+              "Title": "SecurityChatbot.cs",
+              "DocumentMoniker": "C:\\Users\\chuma\\OneDrive\\Desktop\\PROG6221POE\\Chatbot\\SecurityChatbot.cs",
+              "RelativeDocumentMoniker": "SecurityChatbot.cs",
+              "ToolTip": "C:\\Users\\chuma\\OneDrive\\Desktop\\PROG6221POE\\Chatbot\\SecurityChatbot.cs",
+              "RelativeToolTip": "SecurityChatbot.cs",
+              "ViewState": "AgIAAMUAAAAAAAAAAAAswEMCAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-23T14:41:51.877Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "ChatbotBase.cs",
               "DocumentMoniker": "C:\\Users\\chuma\\OneDrive\\Desktop\\PROG6221POE\\Chatbot\\ChatbotBase.cs",
               "RelativeDocumentMoniker": "ChatbotBase.cs",
@@ -107,32 +120,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "MainWindow.xaml",
-              "DocumentMoniker": "C:\\Users\\chuma\\OneDrive\\Desktop\\PROG6221POE\\Chatbot\\MainWindow.xaml",
-              "RelativeDocumentMoniker": "MainWindow.xaml",
-              "ToolTip": "C:\\Users\\chuma\\OneDrive\\Desktop\\PROG6221POE\\Chatbot\\MainWindow.xaml",
-              "RelativeToolTip": "MainWindow.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-06-22T18:08:00.125Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 5,
               "Title": "Quiz.cs",
               "DocumentMoniker": "C:\\Users\\chuma\\OneDrive\\Desktop\\PROG6221POE\\Chatbot\\Quiz.cs",
               "RelativeDocumentMoniker": "Quiz.cs",
               "ToolTip": "C:\\Users\\chuma\\OneDrive\\Desktop\\PROG6221POE\\Chatbot\\Quiz.cs",
               "RelativeToolTip": "Quiz.cs",
-              "ViewState": "AgIAAJkAAAAAAAAAAAA0wKoAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAIwAAAAAAAAAAADwv6oAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-23T15:50:11.808Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-23T15:50:11.808Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 4,
               "Title": "IResponder.cs",
               "DocumentMoniker": "C:\\Users\\chuma\\OneDrive\\Desktop\\PROG6221POE\\Chatbot\\IResponder.cs",
               "RelativeDocumentMoniker": "IResponder.cs",
