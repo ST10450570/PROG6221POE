@@ -7,7 +7,7 @@ using System.Windows.Media;
 
 namespace Chatbot
 {
-    public class SecurityChatbot : ChatbotBase, IResponder
+   public class SecurityChatbot : ChatbotBase, IResponder
     {
         private bool _running;
         private Dictionary<string, string[]> _responses;
@@ -484,6 +484,25 @@ namespace Chatbot
                 return;
             }
 
+            // 🔍 Explicit interest declaration check
+            if (Regex.IsMatch(input, @"\b(interested in|like|love|enjoy|favorite topic is)\b", RegexOptions.IgnoreCase))
+            {
+                foreach (var declaredTopic in _responses.Keys)
+                {
+                    if (input.IndexOf(declaredTopic, StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        TopicInterest[declaredTopic] = 3; // Max interest
+                        LastTopic = declaredTopic;
+                        if (!_discussedTopics.Contains(declaredTopic))
+                            _discussedTopics.Add(declaredTopic);
+
+                        window.AppendToChat($"✨ Noted! I'll remember you're interested in {declaredTopic}. Here's something about it:", Brushes.Cyan);
+                        window.AppendToChat(GetTopicResponse(declaredTopic), Brushes.Green);
+                        return;
+                    }
+                }
+            }
+
             var currentFavorite = GetFavoriteTopic();
             if (currentFavorite != null && (input.Contains("favorite") || input.Contains("prefer")))
             {
@@ -495,6 +514,7 @@ namespace Chatbot
 
             ProvideFallbackResponse(input, window);
         }
+
 
         private bool IsTopicsRequest(string input)
         {
@@ -634,7 +654,8 @@ namespace Chatbot
             {
                 var responses = _responses[topic];
 
-                int index = 0;
+                var random = new Random();
+                int index = random.Next(responses.Length);
                 if (CurrentSentiment != "neutral")
                 {
                     index = 1 % responses.Length;

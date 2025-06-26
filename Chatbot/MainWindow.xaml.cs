@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,6 +27,7 @@ namespace Chatbot
         private bool _awaitingTaskReminder = false;
         private string _currentTaskTitle = "";
         private string _currentTaskDescription = "";
+        
 
 
 
@@ -133,11 +135,24 @@ namespace Chatbot
                     return;
                 }
 
+                // Try to parse as task command first
+                if (TryParseTaskCommand(input))
+                {
+                    return;
+                }
+
+                // Handle quiz commands before special commands
+                if (HandleQuizCommands(input))
+                {
+                    return;
+                }
+
                 if (HandleSpecialCommands(input))
                 {
                     return;
                 }
 
+                // Fallback to chatbot response
                 _chatbot.Respond(input, this);
             }
             catch (Exception ex)
@@ -145,6 +160,59 @@ namespace Chatbot
                 AppendToChat($"▲ Error: {ex.Message}", Brushes.Red);
             }
         }
+
+        private bool HandleQuizCommands(string input)
+        {
+            if (input.Equals("start quiz", StringComparison.OrdinalIgnoreCase))
+            {
+                StartQuizButton_Click(null, null);
+                return true;
+            }
+
+            if (input.Equals("next question", StringComparison.OrdinalIgnoreCase) && NextQuizButton.IsEnabled)
+            {
+                NextQuizButton_Click(null, null);
+                return true;
+            }
+
+            if (input.Equals("submit answer", StringComparison.OrdinalIgnoreCase) && SubmitQuizButton.IsEnabled)
+            {
+                SubmitQuizButton_Click(null, null);
+                return true;
+            }
+
+            // Handle direct quiz answers
+            if (QuizOption1.IsEnabled && (input.Equals("a", StringComparison.OrdinalIgnoreCase) || input == "1" || input=="True"))
+            {
+                QuizOption1.IsChecked = true;
+                SubmitQuizButton_Click(null, null);
+                return true;
+            }
+
+            if (QuizOption2.IsEnabled && (input.Equals("b", StringComparison.OrdinalIgnoreCase) || input == "2" || input == "True"))
+            {
+                QuizOption2.IsChecked = true;
+                SubmitQuizButton_Click(null, null);
+                return true;
+            }
+
+            if (QuizOption3.IsEnabled && (input.Equals("c", StringComparison.OrdinalIgnoreCase) || input == "3"))
+            {
+                QuizOption3.IsChecked = true;
+                SubmitQuizButton_Click(null, null);
+                return true;
+            }
+
+            if (QuizOption4.IsEnabled && (input.Equals("d", StringComparison.OrdinalIgnoreCase) || input == "4"))
+            {
+                QuizOption4.IsChecked = true;
+                SubmitQuizButton_Click(null, null);
+                return true;
+            }
+
+            return false;
+        }
+
 
         private void HandleNameInput(string name)
         {
@@ -165,7 +233,6 @@ namespace Chatbot
         {
             _currentTaskTitle = title;
             _awaitingTaskTitle = false;
-            _awaitingTaskDescription = true;
             AppendToChat("🤖 Please enter the task description:", Brushes.Magenta);
         }
 
@@ -177,28 +244,161 @@ namespace Chatbot
             AppendToChat("🤖 Would you like to set a reminder? (yes/no or specify days, e.g. '3 days')", Brushes.Magenta);
         }
 
-        private void HandleTaskReminderInput(string input)
+        private bool TryParseTaskCommand(string input)
         {
-            DateTime? reminderDate = null;
-            input = input.ToLower();
-
-            if (input == "yes" || input == "y")
+            // Check if input matches any task creation pattern
+            if (Regex.IsMatch(input, @"\b(add|create|new)\s+task\b", RegexOptions.IgnoreCase) ||
+                Regex.IsMatch(input, @"\b(remind\s+me\s+to|set\s+reminder\s+for)\b", RegexOptions.IgnoreCase))
             {
-                reminderDate = DateTime.Now.AddDays(1); // Default to 1 day if just "yes"
-            }
-            else if (input.StartsWith("in "))
-            {
-                if (int.TryParse(input.Substring(3).Split(' ')[0], out int days))
+                // Start interactive task creation if details are incomplete
+                if (!TryParseCompleteTaskCommand(input))
                 {
-                    reminderDate = DateTime.Now.AddDays(days);
+                    if (!_awaitingTaskDescription) // Only call if not already waiting for description
+                        StartInteractiveTaskCreation(input);
+                }
+
+                return true;
+            }
+            return false;
+        }
+
+        private bool TryParseCompleteTaskCommand(string input)
+        {
+            // First try to extract complete task details from command
+            var match = Regex.Match(input,
+                @"(?:(?:add|create)\s+task\s+(?:called\s+)?(?<title>.+?)(?:\s+with\s+description\s+(?<desc>.+?))?(?:\s+(?:in|for|on|by)\s+(?<time>.+))?|" +
+                @"(?:remind\s+me\s+to|set\s+reminder\s+for)\s+(?<title>.+?)(?:\s+(?:with\s+details?|description)\s+(?<desc>.+?))?(?:\s+(?:in|for|on|by)\s+(?<time>.+))?)",
+                RegexOptions.IgnoreCase);
+
+            if (match.Success)
+            {
+                // PROPERLY extract the full title without truncation
+                string title = match.Groups["title"].Value.Trim();
+
+                // Ensure we capture everything after "Add Task" until description/time markers
+                if (title.Length == 1 && input.Contains("Add Task") )
+                {
+                    // Fallback for when regex doesn't capture full title
+                    int taskIndex = input.IndexOf("Add Task", StringComparison.OrdinalIgnoreCase);
+                    title = input.Substring(taskIndex + 8).Trim();
+
+                    // Remove any trailing description/time phrases
+                    var descIndex = title.IndexOf(" with ", StringComparison.OrdinalIgnoreCase);
+                    if (descIndex > 0) title = title.Substring(0, descIndex).Trim();
+
+                    var timeIndex = title.IndexOf(" in ", StringComparison.OrdinalIgnoreCase);
+                    if (timeIndex > 0) title = title.Substring(0, timeIndex).Trim();
+                }
+
+                string description = match.Groups["desc"].Success ? match.Groups["desc"].Value.Trim() : "";
+                string timeExpression = match.Groups["time"].Success ? match.Groups["time"].Value.Trim() : "";
+
+                DateTime? reminderDate = ParseReminderTime(timeExpression);
+
+                // If title is still just one character, fall back to interactive mode
+                if (title.Length <= 1)
+                {
+                    StartInteractiveTaskCreation(input);
+                    return false;
+                }
+
+
+                if (string.IsNullOrWhiteSpace(description))
+                {
+                    _currentTaskTitle = title;
+                   
+                    AppendToChat($"🤖 Please describe the task '{title}':", Brushes.Magenta);
+                   _awaitingTaskDescription = true; // Set this here instead
+                    return false;
+                }
+
+                if (!string.IsNullOrWhiteSpace(timeExpression) && !reminderDate.HasValue)
+                {
+                    _currentTaskTitle = title;
+                    _currentTaskDescription = description;
+                    _awaitingTaskReminder = true;
+                    AppendToChat($"🤖 I didn't understand the time '{timeExpression}'. When should I remind you? (e.g., 'in 3 days', 'tomorrow')", Brushes.Magenta);
+                    return false;
+                }
+
+                CreateTask(title, description, reminderDate);
+                return true;
+            }
+
+            return false;
+        }
+
+        private void StartInteractiveTaskCreation(string input)
+        {
+            // Try to extract at least a title from the input
+            string potentialTitle = Regex.Replace(input,
+                @"\b(add|create|new)\s+task\b|\b(remind\s+me\s+to|set\s+reminder\s+for)\b",
+                "", RegexOptions.IgnoreCase).Trim();
+
+            if (!string.IsNullOrWhiteSpace(potentialTitle))
+            {
+                _currentTaskTitle = potentialTitle;
+                AppendToChat($"🤖 Please describe the task '{potentialTitle}':", Brushes.Magenta);
+                _awaitingTaskDescription = true; // Set this here
+            }
+            else
+            {
+                _awaitingTaskTitle = true;
+                AppendToChat("🤖 What would you like to name this task?", Brushes.Magenta);
+            }
+        }
+
+        private DateTime? ParseReminderTime(string timeExpression)
+        {
+            if (string.IsNullOrWhiteSpace(timeExpression))
+                return null;
+
+            timeExpression = timeExpression.ToLower();
+
+            // Handle simple expressions first
+            if (timeExpression == "tomorrow")
+                return DateTime.Now.AddDays(1);
+            if (timeExpression == "next week")
+                return DateTime.Now.AddDays(7);
+            if (timeExpression == "next month")
+                return DateTime.Now.AddMonths(1);
+
+            // Handle "in X days/weeks/months"
+            var match = Regex.Match(timeExpression, @"(?:in|for)\s+(\d+)\s+(day|week|month)s?");
+            if (match.Success)
+            {
+                int quantity = int.Parse(match.Groups[1].Value);
+                string unit = match.Groups[2].Value;
+
+                
+                switch (unit)
+                {
+                    case "day":
+                        return DateTime.Now.AddDays(quantity);
+                    case "week":
+                        return DateTime.Now.AddDays(quantity * 7);
+                    case "month":
+                        return DateTime.Now.AddMonths(quantity);
+                    default:
+                        return null;
                 }
             }
 
-            // Create the task
+            // Handle specific dates
+            if (DateTime.TryParse(timeExpression, out DateTime specificDate))
+            {
+                return specificDate;
+            }
+
+            return null;
+        }
+
+        private void CreateTask(string title, string description, DateTime? reminderDate)
+        {
             var task = new TaskItem
             {
-                Title = _currentTaskTitle,
-                Description = _currentTaskDescription,
+                Title = title,
+                Description = string.IsNullOrWhiteSpace(description) ? "No description provided" : description,
                 ReminderDate = reminderDate,
                 CreatedDate = DateTime.Now,
                 IsCompleted = false
@@ -206,18 +406,30 @@ namespace Chatbot
 
             _tasks.Add(task);
 
-            AppendToChat($"🤖 Task added: {task.Title}" +
-                (task.ReminderDate.HasValue ? $" (Reminder set for {task.ReminderDate.Value.ToShortDateString()})" : ""),
-                Brushes.LightGreen);
+            string response = $"✅ Task created: \"{task.Title}\"\n";
+            response += $"📝 Description: {task.Description}\n";
+            if (task.ReminderDate.HasValue)
+            {
+                response += $"⏰ Reminder set for: {task.ReminderDate.Value.ToString("f")}";
+            }
 
-            AddToActivityLog($"Task added via chat: {task.Title}", "User");
+            AppendToChat(response, Brushes.LightGreen);
+            AddToActivityLog($"Task created:\" {task.Title}", "User");
             UpdateTaskListDisplay();
 
-            // Reset task state
-            _awaitingTaskReminder = false;
-            _currentTaskTitle = "";
-            _currentTaskDescription = "";
+            // Update UI to match
+            Dispatcher.Invoke(() =>
+            {
+                TaskTitleInput.Text = title;
+                TaskDescriptionInput.Text = description;
+                if (reminderDate.HasValue)
+                {
+                    TaskReminderDate.SelectedDate = reminderDate;
+                    SetReminderCheck.IsChecked = true;
+                }
+            });
         }
+
         private bool HandleSpecialCommands(string input)
         {
             if (input.Equals("topics", StringComparison.OrdinalIgnoreCase) ||
@@ -228,7 +440,7 @@ namespace Chatbot
             }
 
             if (input.Equals("show activity log", StringComparison.OrdinalIgnoreCase) ||
-                input.Equals("what have you done", StringComparison.OrdinalIgnoreCase))
+                input.Equals("what have i done", StringComparison.OrdinalIgnoreCase))
             {
                 ShowActivityLog();
                 return true;
@@ -303,6 +515,89 @@ namespace Chatbot
                 AppendToChat($"Username set to: {newUsername}", Brushes.LightGreen);
                 AddToActivityLog($"Username changed to: {newUsername}", "User");
             }
+        }
+
+        private void HandleTaskReminderInput(string input)
+        {
+            DateTime? reminderDate = null;
+            input = input.Trim().ToLower();
+
+            if (string.IsNullOrWhiteSpace(_currentTaskTitle))
+            {
+                AppendToChat("⚠️ Task title is missing. Cannot create task.", Brushes.OrangeRed);
+                return;
+            }
+
+            if (input == "yes" || input == "y")
+            {
+                reminderDate = DateTime.Now.AddDays(1);
+            }
+            else if (input.StartsWith("in "))
+            {
+                // Example: "in 2 days", "in 5", "in 1 week"
+                var parts = input.Substring(3).Split(' ');
+                if (int.TryParse(parts[0], out int amount))
+                {
+                    string unit = parts.Length > 1 ? parts[1] : "days";
+
+                    switch (unit)
+                    {
+                        case "day":
+                        case "days":
+                            reminderDate = DateTime.Now.AddDays(amount);
+                            break;
+                        case "week":
+                        case "weeks":
+                            reminderDate = DateTime.Now.AddDays(amount * 7);
+                            break;
+                        case "month":
+                        case "months":
+                            reminderDate = DateTime.Now.AddMonths(amount);
+                            break;
+                        default:
+                            AppendToChat("⚠️ Unrecognized time unit. Try 'in 3 days', 'in 1 week', etc.", Brushes.OrangeRed);
+                            return;
+                    }
+                }
+                else
+                {
+                    AppendToChat("⚠️ Could not understand the time format. Try 'in 2 days', 'in 1 week', etc.", Brushes.OrangeRed);
+                    return;
+                }
+            }
+            else if (DateTime.TryParse(input, out DateTime parsedDate))
+            {
+                reminderDate = parsedDate;
+            }
+            else if (!string.IsNullOrWhiteSpace(input) && input != "no" && input != "n")
+            {
+                AppendToChat("⚠️ Invalid input. Please enter a date (e.g., 'in 3 days', 'next week', or 'no').", Brushes.OrangeRed);
+                return;
+            }
+
+            // Create the task
+            var task = new TaskItem
+            {
+                Title = _currentTaskTitle.Trim(),
+                Description = string.IsNullOrWhiteSpace(_currentTaskDescription) ? "No description provided." : _currentTaskDescription.Trim(),
+                ReminderDate = reminderDate,
+                CreatedDate = DateTime.Now,
+                IsCompleted = false
+            };
+
+            _tasks.Add(task);
+
+            AppendToChat($"✅ Task added: {task.Title}" +
+                (task.ReminderDate.HasValue ? $" (⏰ Reminder: {task.ReminderDate.Value.ToString("g")})" : ""),
+                Brushes.LightGreen);
+
+            AddToActivityLog($"Task added: {task.Title}", "User");
+            UpdateTaskListDisplay();
+
+            // Reset
+            _awaitingTaskReminder = false;
+            _currentTaskTitle = "";
+            _currentTaskDescription = "";
         }
 
         private void ShowAvailableTopics()

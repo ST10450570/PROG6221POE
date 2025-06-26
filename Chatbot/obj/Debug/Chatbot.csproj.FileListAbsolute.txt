@@ -32,7 +32,6 @@ C:\Users\chuma\OneDrive\Desktop\PROG6221POE\Chatbot\bin\Debug\Chatbot.exe.config
 C:\Users\chuma\OneDrive\Desktop\PROG6221POE\Chatbot\bin\Debug\Chatbot.exe
 C:\Users\chuma\OneDrive\Desktop\PROG6221POE\Chatbot\bin\Debug\Chatbot.pdb
 C:\Users\chuma\OneDrive\Desktop\PROG6221POE\Chatbot\obj\Debug\Chatbot.csproj.AssemblyReference.cache
-C:\Users\chuma\OneDrive\Desktop\PROG6221POE\Chatbot\obj\Debug\Chatbot.exe.config
 C:\Users\chuma\OneDrive\Desktop\PROG6221POE\Chatbot\obj\Debug\MainWindow.g.cs
 C:\Users\chuma\OneDrive\Desktop\PROG6221POE\Chatbot\obj\Debug\App.g.cs
 C:\Users\chuma\OneDrive\Desktop\PROG6221POE\Chatbot\obj\Debug\Chatbot_MarkupCompile.cache
@@ -44,3 +43,4 @@ C:\Users\chuma\OneDrive\Desktop\PROG6221POE\Chatbot\obj\Debug\Chatbot.csproj.Gen
 C:\Users\chuma\OneDrive\Desktop\PROG6221POE\Chatbot\obj\Debug\Chatbot.csproj.CoreCompileInputs.cache
 C:\Users\chuma\OneDrive\Desktop\PROG6221POE\Chatbot\obj\Debug\Chatbot.exe
 C:\Users\chuma\OneDrive\Desktop\PROG6221POE\Chatbot\obj\Debug\Chatbot.pdb
+C:\Users\chuma\OneDrive\Desktop\PROG6221POE\Chatbot\obj\Debug\Chatbot.exe.config
