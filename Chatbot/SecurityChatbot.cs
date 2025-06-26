@@ -41,66 +41,312 @@ namespace Chatbot
 
         protected override string DetectSentiment(string input)
         {
-            var sentiment = base.DetectSentiment(input);
+            // Combined emotional lexicon with intensity (word => [sentiment, intensity])
+            var emotionalWords = new Dictionary<string, (string sentiment, int intensity)>
+    {
+        // Worried/Anxious
+        {"worried", ("worried", 1)}, {"anxious", ("worried", 2)}, {"panicked", ("worried", 3)},
+        {"scared", ("worried", 2)}, {"terrified", ("worried", 3)}, {"fearful", ("worried", 2)},
+        {"nervous", ("worried", 1)}, {"stressed", ("worried", 2)}, {"overwhelmed", ("worried", 2)},
+        {"apprehensive", ("worried", 1)}, {"concerned", ("worried", 1)}, {"uneasy", ("worried", 1)},
+        {"afraid", ("worried", 2)},
 
-            if (_currentEmotion == sentiment)
+        // Angry
+        {"angry", ("angry", 2)}, {"furious", ("angry", 3)}, {"enraged", ("angry", 3)},
+        {"frustrated", ("angry", 1)}, {"irritated", ("angry", 1)}, {"annoyed", ("angry", 1)},
+        {"mad", ("angry", 2)}, {"upset", ("angry", 1)}, {"livid", ("angry", 3)},
+        {"outraged", ("angry", 3)}, {"aggravated", ("angry", 2)}, {"exasperated", ("angry", 2)},
+
+        // Happy
+        {"happy", ("happy", 1)}, {"joyful", ("happy", 2)}, {"ecstatic", ("happy", 3)},
+        {"excited", ("happy", 2)}, {"thrilled", ("happy", 3)}, {"delighted", ("happy", 2)},
+        {"pleased", ("happy", 1)}, {"content", ("happy", 1)}, {"grateful", ("happy", 1)},
+        {"optimistic", ("happy", 1)}, {"proud", ("happy", 2)}, {"cheerful", ("happy", 1)},
+
+        // Confused
+        {"confused", ("confused", 1)}, {"bewildered", ("confused", 2)}, {"perplexed", ("confused", 2)},
+        {"puzzled", ("confused", 1)}, {"unsure", ("confused", 1)}, {"doubt", ("confused", 1)},
+        {"disoriented", ("confused", 2)}, {"baffled", ("confused", 2)}, {"muddled", ("confused", 1)},
+        {"hesitant", ("confused", 1)}, {"uncertain", ("confused", 1)}, {"ambiguous", ("confused", 1)},
+
+        // Sad
+        {"sad", ("sad", 1)}, {"depressed", ("sad", 3)}, {"heartbroken", ("sad", 3)},
+        {"unhappy", ("sad", 1)}, {"miserable", ("sad", 2)}, {"gloomy", ("sad", 1)},
+        {"down", ("sad", 1)}, {"disheartened", ("sad", 2)}, {"dejected", ("sad", 2)},
+        {"despondent", ("sad", 3)}, {"hopeless", ("sad", 3)}, {"lonely", ("sad", 2)},
+        {"grieving", ("sad", 3)},
+
+        // Others
+        {"surprised", ("surprised", 1)}, {"shocked", ("surprised", 3)},
+        {"disgusted", ("disgusted", 1)}, {"embarrassed", ("embarrassed", 1)},
+        {"guilty", ("guilty", 1)}, {"ashamed", ("guilty", 2)}
+    };
+
+            string detectedEmotion = "neutral";
+            int maxIntensity = 0;
+
+            // Word-based detection
+            foreach (var entry in emotionalWords)
+            {
+                if (Regex.IsMatch(input, $@"\b{entry.Key}\b", RegexOptions.IgnoreCase))
+                {
+                    if (entry.Value.intensity > maxIntensity)
+                    {
+                        detectedEmotion = entry.Value.sentiment;
+                        maxIntensity = entry.Value.intensity;
+                    }
+                }
+            }
+
+            // Phrase-based detection (if no stronger word found)
+            if (detectedEmotion == "neutral")
+            {
+                var emotionalPhrases = new Dictionary<string, string>
+                {
+                    [@"\b(i('m| am) (really |very |extremely )?(worried|scared|anxious|nervous))\b"] = "worried",
+                    [@"\b(i('m| am) (really |very |extremely )?(angry|mad|furious))\b"] = "angry",
+                    [@"\b(i('m| am) (really |very |extremely )?(happy|excited|joyful))\b"] = "happy",
+                    [@"\b(i('m| am) (really |very |extremely )?(sad|depressed|heartbroken))\b"] = "sad",
+                    [@"\b(i('m| am) (really |very |extremely )?(confused|unsure|puzzled))\b"] = "confused",
+                    [@"\b(i('m| am) (so )?(angry|mad) about)"] = "angry",
+                    [@"\b(i('m| am) (really )?(excited|happy) about)"] = "happy",
+                    [@"\b(i('m| am) (really )?(scared|afraid) of)"] = "worried"
+                };
+
+                foreach (var pattern in emotionalPhrases)
+                {
+                    if (Regex.IsMatch(input, pattern.Key, RegexOptions.IgnoreCase))
+                    {
+                        detectedEmotion = pattern.Value;
+                        break;
+                    }
+                }
+            }
+
+            // Emoticons or punctuation-based detection (if still neutral)
+            if (detectedEmotion == "neutral")
+            {
+                if (input.Contains("!!!") || input.Contains("??") || (input.ToUpper() == input && input.Length > 10))
+                    detectedEmotion = "angry";
+                else if (input.EndsWith("...") || input.Contains("?"))
+                    detectedEmotion = "confused";
+                else if (Regex.IsMatch(input, @"(:\)|:-\)|:D|❤|😊)"))
+                    detectedEmotion = "happy";
+                else if (Regex.IsMatch(input, @"(:\(|:-\(|:'\(|💔|😢)"))
+                    detectedEmotion = "sad";
+            }
+
+            // Update emotion tracking
+            if (_currentEmotion == detectedEmotion)
             {
                 _emotionIntensity = Math.Min(_emotionIntensity + 1, 3);
             }
             else
             {
-                _currentEmotion = sentiment;
-                _emotionIntensity = 1;
+                _currentEmotion = detectedEmotion;
+                _emotionIntensity = Math.Max(maxIntensity, 1);
             }
 
-            _emotionalHistory.Add(sentiment);
-            return sentiment;
+            _emotionalHistory.Add(detectedEmotion);
+            return detectedEmotion;
         }
+
 
         protected override string GetSentimentResponse(string sentiment, string topic = null)
         {
-            if (topic != null && (sentiment == "happy" || sentiment == "excited"))
+            // Expanded emotional-topic matrix with more natural phrasing
+            var emotionalTopicResponses = new Dictionary<string, Dictionary<string, string[]>>()
+    {
+        {
+            "worried", new Dictionary<string, string[]>()
             {
-                string interestNote = _emotionalHistory.Last();
-                if (!_userInterests.ContainsKey(topic))
+                { "hacking", new[] {
+                    "I completely understand why hacking would scare you - it's a very real threat in our digital world. The good news? There are concrete steps we can take to protect you. Let's talk through your specific concerns - what about hackers worries you most?",
+                    "That nervous feeling about hackers is completely valid. Many people share this fear, but I'm here to help you feel empowered. Would breaking down common hacking methods and defenses help ease your mind?",
+                    "Your concern about hackers shows you're security-aware, which is great! While threats exist, knowledge is your best defense. Would learning about real-world protections help you feel safer?"
+                }},
+                { "malware", new[] {
+                    "Malware can definitely feel scary - these invisible threats lurking in devices. But here's what comforts me: modern protections stop 99% of malware automatically. Would exploring these safeguards help you feel more secure?",
+                    "I hear the fear in your voice when you mention malware. That's completely understandable. The silver lining? With a few simple habits, you can stay protected. Want me to share the most effective ones?",
+                    "Your worry about malware shows how much you value your digital safety. While malware exists, so do powerful defenses. Would walking through them together help you feel more at ease?"
+                }},
+                { "phishing", new[] {
+                    "Phishing scams prey on our trust - no wonder they make you anxious. The comforting truth? Once you know the signs, they're easy to spot. Want to practice identifying phishing attempts together?",
+                    "That nervous feeling about phishing is completely normal. What if I told you we could turn that worry into confidence? Recognizing phishing attempts becomes second nature with practice.",
+                    "Many people feel vulnerable about phishing - you're not alone. The good news? You're already taking the first step by being aware. Would learning some foolproof verification techniques help?"
+                }},
+                { "identity theft", new[] {
+                    "The thought of identity theft can be terrifying - it's such a personal violation. What comforts me is knowing there are strong recovery processes. Would learning about identity protection measures help?",
+                    "Your fear about identity theft shows how much you value your personal security. While the threat is real, so are the protections. Want to create a personalized defense plan together?",
+                    "Identity theft worries many people deeply - that knot in your stomach is understandable. The silver lining? Early detection systems and recovery options have never been better."
+                }}
+            }
+        },
+        {
+            "angry", new Dictionary<string, string[]>()
+            {
+                { "hacking", new[] {
+                    "That burning anger about hackers? I feel it too. These digital intruders violate our privacy in the worst ways. Want to channel that anger into learning powerful countermeasures?",
+                    "Your fury about hacking is completely justified. What if we transformed that anger into action? I can show you exactly how to lock down your digital life.",
+                    "Hacking makes my circuits heat up too! That rage you feel? It means you care about your security. Let's turn that energy into protective knowledge."
+                }},
+                { "scams", new[] {
+                    "That simmering anger about scams? I get it - they prey on trust and kindness. Want to arm yourself with scam-spotting superpowers to fight back?",
+                    "Scams are infuriating! That tightness in your chest is completely valid. The best revenge? Becoming scam-proof. Ready to learn the tricks scammers hate?",
+                    "Your frustration with scams shows your strong moral compass. Let's redirect that energy into scam-busting skills that protect you and others."
+                }},
+                { "data breach", new[] {
+                    "That righteous anger about data breaches? Companies SHOULD protect our information better. Want to learn how to check if you're affected and lock down your data?",
+                    "Data breaches would make anyone see red! That heat you feel? Let's channel it into taking control of your digital footprint.",
+                    "Your outrage about breaches is spot-on. While we can't undo them, we can armor-plate your personal information moving forward."
+                }}
+            }
+        },
+        {
+            "sad", new Dictionary<string, string[]>()
+            {
+                { "identity theft", new[] {
+                    "That heavy feeling about identity theft? It's completely understandable - it's such a personal violation. You're not alone in this. Would a step-by-step recovery plan help lighten the load?",
+                    "The sadness you feel about identity theft matters. While the threat is real, so are the solutions. Would exploring protection options help restore your sense of security?",
+                    "That sinking feeling when you think about identity theft? Many share it. The good news? We can build defenses together that help you feel safe again."
+                }},
+                { "ransomware", new[] {
+                    "The despair ransomware causes is completely valid - it's designed to make victims feel helpless. But here's hope: recovery is possible, and prevention works. Want to explore solutions together?",
+                    "Your sadness about ransomware shows how much you value your digital life. While the threat exists, so do powerful backups and protections. Would learning about them help?",
+                    "That defeated feeling ransomware brings? It's exactly what attackers want. Let's turn that around by building your digital resilience together."
+                }}
+            }
+        },
+        {
+            "happy", new Dictionary<string, string[]>()
+            {
+                { "password", new[] {
+                    "Your excitement about passwords is wonderful! Strong credentials are indeed worth celebrating. Want to learn some next-level tricks that make security fun?",
+                    "I love your positive energy about passwords! They're the unsung heroes of cybersecurity. Ready for some password techniques that feel like superpowers?",
+                    "Your password enthusiasm makes my circuits buzz! Let's build on that positive energy with some cutting-edge credential strategies."
+                }},
+                { "encryption", new[] {
+                    "That spark of joy when you think about encryption? I feel it too! It's like digital magic. Want to explore how to use it in your daily life?",
+                    "Your encryption excitement is contagious! This technology deserves celebration. Ready to dive deeper into how it keeps your secrets safe?",
+                    "The happiness you feel about encryption? That's the thrill of true privacy protection! Let's channel that into practical applications."
+                }}
+            }
+        },
+        {
+            "confused", new Dictionary<string, string[]>()
+            {
+                { "zero trust", new[] {
+                    "That fog of confusion about Zero Trust? Completely normal - it turns security thinking upside down. Let's clear the air together. What specific concept is puzzling you?",
+                    "Zero Trust can feel like a maze at first. Your confusion shows you're engaging deeply. Want to walk through the key principles one by one?",
+                    "That head-scratching feeling about Zero Trust? Many feel it initially. The good news? It becomes crystal clear with the right explanations."
+                }},
+                { "firewall", new[] {
+                    "Firewalls confusing you? That's okay - they're complex digital bouncers. Want me to explain how they work in everyday terms?",
+                    "That perplexed feeling about firewalls? Let's simplify things. Imagine them as highly trained security guards for your network.",
+                    "Your firewall confusion is completely understandable. The concepts become much clearer with relatable analogies. Ready to try?"
+                }}
+            }
+        }
+    };
+
+            // Handle cases where user expresses emotion without mentioning a topic
+            if (topic == null && sentiment != "neutral")
+            {
+                var probingQuestions = new Dictionary<string, string[]>
                 {
-                    _userInterests[topic] = interestNote;
+                    ["worried"] = new[] {
+                "I sense you're feeling uneasy. Would sharing what's on your mind help lighten the load?",
+                "That worried feeling can be overwhelming. What specifically is troubling you?",
+                "Your concern matters to me. What's making you feel anxious today?"
+            },
+                    ["angry"] = new[] {
+                "I hear the frustration in your words. What's causing this reaction?",
+                "That anger tells me something important is bothering you. Want to talk it through?",
+                "Your irritation is valid. What exactly has you upset?"
+            },
+                    ["sad"] = new[] {
+                "That heavy feeling you have matters. Would talking about what's causing it help?",
+                "I sense your sadness. What's weighing on your heart today?",
+                "You seem down. Want to share what's troubling you?"
+            },
+                    ["happy"] = new[] {
+                "Your positive energy is wonderful! What's putting that smile on your face?",
+                "I love your enthusiasm! What are you excited about?",
+                "Your good mood is contagious! What's bringing you joy?"
+            },
+                    ["confused"] = new[] {
+                "That confused feeling is often the first step to understanding. What exactly is unclear?",
+                "The fog of confusion can lift with the right explanation. What concept needs clarifying?",
+                "Your uncertainty shows you're thinking deeply. Which part is puzzling you?"
+            }
+                };
+
+                if (probingQuestions.ContainsKey(sentiment))
+                {
+                    return probingQuestions[sentiment][new Random().Next(probingQuestions[sentiment].Length)];
                 }
             }
 
-            if (sentiment != "neutral" && topic == null)
+            // Generate topic-specific emotional response
+            if (topic != null && emotionalTopicResponses.ContainsKey(sentiment))
             {
-                var probingQuestions = new Dictionary<string, string>
+                // Check for exact topic match first
+                if (emotionalTopicResponses[sentiment].ContainsKey(topic))
                 {
-                    ["worried"] = $"I've noticed you've seemed concerned. {(_emotionalHistory.Count(x => x == "worried") > 1 ? "Still worried about cybersecurity risks?" : "What security aspects concern you most?")}",
-                    ["angry"] = $"I hear frustration in your words. {(_emotionalHistory.Count(x => x == "angry") > 1 ? "This still bothers you, doesn't it?" : "What security issue is upsetting you?")}",
-                    ["sad"] = $"You seem upset. {(_emotionalHistory.Count(x => x == "sad") > 1 ? "This still makes you sad?" : "Would sharing what's bothering you help?")}",
-                    ["happy"] = $"You sound positive! {(_emotionalHistory.Count(x => x == "happy") > 1 ? "Still excited about cybersecurity?" : "What security topics interest you?")}",
-                    ["confused"] = $"I sense confusion. {(_emotionalHistory.Count(x => x == "confused") > 1 ? "Still unclear about this?" : "What concepts would you like explained?")}"
-                };
+                    var responses = emotionalTopicResponses[sentiment][topic];
+                    return responses[new Random().Next(responses.Length)];
+                }
 
-                return probingQuestions.ContainsKey(sentiment)
-                    ? probingQuestions[sentiment]
-                    : "How can I help you with cybersecurity today?";
+                // Check keyword associations if no exact match
+                foreach (var keywordPair in _keywords)
+                {
+                    if (keywordPair.Value.Contains(topic.ToLower()) && emotionalTopicResponses[sentiment].ContainsKey(keywordPair.Key))
+                    {
+                        var responses = emotionalTopicResponses[sentiment][keywordPair.Key];
+                        return responses[new Random().Next(responses.Length)];
+                    }
+                }
             }
 
-            var intensityPhrases = new Dictionary<string, string[]>
+            // Fallback emotional responses when topic isn't recognized
+            var fallbackEmotionalResponses = new Dictionary<string, string[]>
             {
-                ["worried"] = new[] { "I understand your concern", "This is clearly worrying you", "I can see this really troubles you" },
-                ["angry"] = new[] { "I hear your frustration", "You're clearly upset about this", "This has made you quite angry" },
-                ["sad"] = new[] { "I sense your unease", "This seems to bother you deeply", "You seem really affected by this" },
-                ["happy"] = new[] { "Your enthusiasm is great", "I love your positive attitude", "Your excitement is contagious" },
-                ["confused"] = new[] { "This can be confusing", "I understand your confusion", "This is quite perplexing" }
+                ["worried"] = new[] {
+            "I can hear the concern in your voice. Digital safety worries are completely valid. Would talking through them help?",
+            "That anxious feeling matters. You're not alone in these concerns - let's address them together.",
+            "Your worry shows you care about security. That awareness itself is powerful protection."
+        },
+                ["angry"] = new[] {
+            "That frustration is completely understandable. Digital threats can feel so unfair. Want to channel that energy into solutions?",
+            "Your anger tells me something important is at stake. Let's turn that passion into protection.",
+            "I hear the heat in your words. These issues would anger anyone. Want to explore ways to fight back?"
+        },
+                ["sad"] = new[] {
+            "That heavy feeling matters. Cybersecurity issues can hit us emotionally. Would sharing more help?",
+            "Your sadness shows how much you value your digital wellbeing. Let's work to restore your sense of safety.",
+            "I sense your distress. These concerns can feel deeply personal. You're not alone in this."
+        },
+                ["happy"] = new[] {
+            "Your positive energy is wonderful! Security is stronger when approached with curiosity and optimism.",
+            "I love your enthusiasm! Digital protection can actually be quite empowering and rewarding.",
+            "Your good mood is making this security chat more enjoyable! Let's build on that positive energy."
+        },
+                ["confused"] = new[] {
+            "That confusion is completely normal with technical topics. What exactly would you like me to clarify?",
+            "Your uncertainty shows you're engaging deeply. Let's break this down step by step.",
+            "Cybersecurity concepts can be tricky at first. Which part needs simpler explanation?"
+        }
             };
 
-            var response = base.GetSentimentResponse(sentiment, topic);
-
-            if (intensityPhrases.ContainsKey(sentiment) && _emotionIntensity > 1)
+            if (fallbackEmotionalResponses.ContainsKey(sentiment))
             {
-                response = intensityPhrases[sentiment][Math.Min(_emotionIntensity - 1, 2)] + ". " + response;
+                return fallbackEmotionalResponses[sentiment][new Random().Next(fallbackEmotionalResponses[sentiment].Length)];
             }
 
-            return response;
+            // Final fallback
+            return topic != null ?
+                $"Let's explore {topic} together. What would you like to know?" :
+                "How can I help you with cybersecurity today?";
         }
 
         private void InitializeResponses()
@@ -653,43 +899,69 @@ namespace Chatbot
             if (_responses.ContainsKey(topic))
             {
                 var responses = _responses[topic];
-
                 var random = new Random();
                 int index = random.Next(responses.Length);
+
+                // Only modify response if sentiment is detected
                 if (CurrentSentiment != "neutral")
                 {
-                    index = 1 % responses.Length;
+                    string sentimentIntro = GetSentimentIntroduction(CurrentSentiment, topic);
+                    string selectedResponse = responses[index];
 
-                    string sentimentIntro;
-                    switch (CurrentSentiment)
+                    // Ensure the response starts lowercase if needed
+                    if (selectedResponse.Length > 0 && char.IsUpper(selectedResponse[0]) )
                     {
-                        case "happy":
-                            sentimentIntro = "I'm glad you're excited about ";
-                            break;
-                        case "sad":
-                            sentimentIntro = "I understand your concerns about ";
-                            break;
-                        case "angry":
-                            sentimentIntro = "I hear your frustration with ";
-                            break;
-                        case "worried":
-                            sentimentIntro = "I know can be worrying, but ";
-                            break;
-                        case "confused":
-                            sentimentIntro = "Let me clarify ";
-                            break;
-                        default:
-                            sentimentIntro = "Let me tell you about ";
-                            break;
+                        selectedResponse = char.ToLower(selectedResponse[0]) + selectedResponse.Substring(1);
                     }
 
-                    return sentimentIntro + topic + ". " + responses[index];
+                    return sentimentIntro + selectedResponse;
                 }
 
                 return responses[index];
             }
 
-            return "Let me tell you about " + topic + "...";
+            return "Let me explore " + topic + " with you...";
+        }
+
+        private string GetSentimentIntroduction(string sentiment, string topic)
+        {
+            // Expanded sentiment introductions with proper grammar
+            var introductions = new Dictionary<string, string[]>
+            {
+                ["happy"] = new[] {
+            "I love your enthusiasm about " + topic + "! ",
+            "Your excitement about " + topic + " is wonderful! ",
+            "It's great that you're interested in " + topic + "! "
+        },
+                ["sad"] = new[] {
+            "I understand your concerns about " + topic + ". ",
+            "I hear the sadness in your voice when discussing " + topic + ". ",
+            "Your feelings about " + topic + " matter. "
+        },
+                ["angry"] = new[] {
+            "I hear your frustration about " + topic + ". ",
+            "Your anger about " + topic + " is understandable. ",
+            "I sense your irritation with " + topic + ". "
+        },
+                ["worried"] = new[] {
+            "I understand why " + topic + " would worry you. ",
+            "Your concerns about " + topic + " are valid. ",
+            "I hear the anxiety in your voice about " + topic + ". "
+        },
+                ["confused"] = new[] {
+            "Let me clarify " + topic + " for you. ",
+            "I'll explain " + topic + " in simpler terms. ",
+            "The confusion about " + topic + " is understandable. "
+        }
+            };
+
+            if (introductions.ContainsKey(sentiment))
+            {
+                var options = introductions[sentiment];
+                return options[new Random().Next(options.Length)];
+            }
+
+            return "Let me tell you about " + topic + ". ";
         }
 
 
