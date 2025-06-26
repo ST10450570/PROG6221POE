@@ -16,15 +16,6 @@ namespace Chatbot
             }
         }
 
-        public static bool IsExitCommand(string input)
-        {
-            string[] exitCommands = { "exit", "quit", "leave", "stop", "end chat", "bye" };
-            foreach (var cmd in exitCommands)
-            {
-                if (input.Equals(cmd, StringComparison.OrdinalIgnoreCase))
-                    return true;
-            }
-            return false;
-        }
+       
     }
 }
